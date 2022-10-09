@@ -499,6 +499,15 @@ std::tuple<std::shared_ptr<SyncRes::domainmap_t>, std::shared_ptr<notifyset_t>> 
     }
   }
 
+  if (::arg().mustDo("serve-rfc1112")) {
+    SLOG(g_log << Logger::Warning << "Inserting rfc 1112 reserved for future use space zones" << endl,
+         log->info(Logr::Notice, "Inserting rfc 1112 reserved for future use space zones"));
+
+    for (int n = 240; n < 256; n++) {
+      makePartialIPZone(*newMap, {std::to_string(n).c_str()}, log);
+    }
+  }
+
   if (::arg().mustDo("serve-rfc1918")) {
     SLOG(g_log << Logger::Warning << "Inserting rfc 1918 private space zones" << endl,
          log->info(Logr::Notice, "Inserting rfc 1918 private space zones"));
@@ -509,6 +518,39 @@ std::tuple<std::shared_ptr<SyncRes::domainmap_t>, std::shared_ptr<notifyset_t>> 
 
     for (int n = 16; n < 32; n++) {
       makePartialIPZone(*newMap, {"172", std::to_string(n).c_str()}, log);
+    }
+  }
+
+  if (::arg().mustDo("serve-rfc2544")) {
+    SLOG(g_log << Logger::Warning << "Inserting rfc 2544 network interconnect device benchmark testing space zones" << endl,
+         log->info(Logr::Notice, "Inserting rfc 2544 network interconnect device benchmark testing space zones"));
+
+    makePartialIPZone(*newMap, {"198", "18"}, log);
+    makePartialIPZone(*newMap, {"198", "19"}, log);
+  }
+
+  if (::arg().mustDo("serve-rfc3927")) {
+    SLOG(g_log << Logger::Warning << "Inserting rfc 3927 link local testing space zones" << endl,
+         log->info(Logr::Notice, "Inserting rfc 3927 link local space zones"));
+
+    makePartialIPZone(*newMap, {"169", "254"}, log);
+  }
+
+  if (::arg().mustDo("serve-rfc5737")) {
+    SLOG(g_log << Logger::Warning << "Inserting rfc 5737 test-net-{1,2,3} space zones" << endl,
+         log->info(Logr::Notice, "Inserting rfc 5737 test-net-{1,2,3} space zones"));
+
+    makePartialIPZone(*newMap, {"192", "0", "2"}, log);
+    makePartialIPZone(*newMap, {"198", "51", "100"}, log);
+    makePartialIPZone(*newMap, {"203", "0", "113"}, log);
+  }
+
+  if (::arg().mustDo("serve-rfc6598")) {
+    SLOG(g_log << Logger::Warning << "Inserting rfc 6598 shared address space space zones" << endl,
+         log->info(Logr::Notice, "Inserting rfc 6598 shared address space space zones"));
+
+    for (int n = 64; n < 128; n++) {
+      makePartialIPZone(*newMap, {"100", std::to_string(n).c_str()}, log);
     }
   }
 
